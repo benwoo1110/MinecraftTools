@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 /**
  * Utility class used to help in doing various reflection actions.
  */
-public class ReflectHelper {
+public final class ReflectHelper {
 
     /**
      * Try to get the {@link Class} based on its classpath.
