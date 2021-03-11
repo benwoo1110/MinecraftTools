@@ -7,14 +7,25 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.List;
 
 public abstract class MinecraftPlugin extends JavaPlugin {
 
     @Override
-    public void onLoad() {
+    public final void onLoad() {
         Logging.setup(this);
+        this.load();
     }
+
+    public void load() { }
+
+    @Override
+    public final void onEnable() {
+        this.enable();
+    }
+
+    public void enable() { }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender,
@@ -32,5 +43,10 @@ public abstract class MinecraftPlugin extends JavaPlugin {
                                                 @NotNull String[] args) {
 
         return super.onTabComplete(sender, command, alias, args);
+    }
+
+    public File getConfigFile() {
+        this.getDataFolder().mkdirs();
+        return new File(this.getDataFolder(), "config.yml");
     }
 }
