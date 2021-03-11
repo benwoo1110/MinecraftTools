@@ -39,7 +39,7 @@ public class YamlFile {
         for (ConfigOption<?> option : configOptions) {
             this.comments.put(option.getPath(), option.getComments());
         }
-        this.load();
+        this.reload();
     }
 
     public void reload() {

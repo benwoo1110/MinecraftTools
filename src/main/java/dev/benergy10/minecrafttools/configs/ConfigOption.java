@@ -61,7 +61,7 @@ public interface ConfigOption<T> {
             return this.option;
         }
 
-        public SimpleConfigOption<T> register(Consumer<SimpleConfigOption<?>> optionRegister) {
+        public SimpleConfigOption<T> register(Consumer<ConfigOption<?>> optionRegister) {
             SimpleConfigOption<T> option = build();
             optionRegister.accept(option);
             return option;
