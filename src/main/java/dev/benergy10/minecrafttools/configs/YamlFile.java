@@ -1,6 +1,7 @@
 package dev.benergy10.minecrafttools.configs;
 
 import com.google.common.base.Strings;
+import dev.benergy10.minecrafttools.utils.Logging;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.BufferedReader;
@@ -25,6 +26,7 @@ public class YamlFile {
     private final File file;
     private final Set<ConfigOption<?>> configOptions;
     private final Map<String, String[]> comments;
+    private final Map<ConfigOption<?>, Object> cacheOptionValues;
 
     private YamlConfiguration config;
 
@@ -32,6 +34,7 @@ public class YamlFile {
         this.file = file;
         this.configOptions = new HashSet<>(configOptions);
         this.comments = new HashMap<>();
+        this.cacheOptionValues = new HashMap<>();
         this.setup();
     }
 
@@ -42,20 +45,35 @@ public class YamlFile {
         this.reload();
     }
 
-    public void reload() {
+    public boolean reload() {
         this.load();
-        this.save();
+        return this.save();
     }
 
     private void load() {
-        try {
-            this.file.getParentFile().mkdirs();
-            this.file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
+        this.cacheOptionValues.clear();
+        if (!createYamlFile()) {
             return;
         }
         this.config = YamlConfiguration.loadConfiguration(this.file);
+        loadDefaultValues();
+    }
+
+    private boolean createYamlFile() {
+        try {
+            this.file.getParentFile().mkdirs();
+            if (this.file.createNewFile()) {
+                Logging.info("Create new %s file.", this.file.getName());
+            }
+        } catch (IOException e) {
+            Logging.severe("An error occurred while trying to create %s file.", this.file.getName());
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private void loadDefaultValues() {
         for (ConfigOption<?> option : this.configOptions) {
             if (this.config.get(option.getPath()) == null) {
                 this.config.set(option.getPath(), option.getDefaultValue());
@@ -93,7 +111,7 @@ public class YamlFile {
             adjustDepth(path, key, depthDifference);
             currentDepth = lineDepth;
 
-            insertComments(configContents, currentDepth, this.getCommentsFor(path.getPathString()));
+            insertComments(configContents, currentDepth, this.comments.get(path.getPathString()));
             configContents.addLine(line);
         }
 
@@ -166,13 +184,14 @@ public class YamlFile {
 
     public <T> void setValue(ConfigOption<T> option, T value) {
         this.config.set(option.getPath(), option.getHandler().serialize(value));
+        this.cacheOptionValues.put(option, value);
     }
 
     public <T> T getValue(ConfigOption<T> option) {
-        return option.getHandler().deserialize(this.config.get(option.getPath()));
+        return (T) this.cacheOptionValues.computeIfAbsent(option, (ConfigOption<?> opt) -> computeValue(opt));
     }
 
-    public String[] getCommentsFor(String path) {
-        return this.comments.get(path);
+    private Object computeValue(ConfigOption<?> option) {
+        return option.getHandler().deserialize(this.config.get(option.getPath()));
     }
 }
