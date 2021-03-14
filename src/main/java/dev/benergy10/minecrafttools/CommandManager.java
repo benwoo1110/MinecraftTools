@@ -11,9 +11,7 @@ public class CommandManager extends PaperCommandManager {
     public CommandManager(Plugin plugin) {
         super(plugin);
         this.getLocales().addBundleClassLoader(new FileResClassLoader(this.getClass().getClassLoader(), plugin));
-        for (Locale locale : Locale.getAvailableLocales()) {
-            this.addSupportedLanguage(locale);
-        }
+        this.addSupportedLanguage(Locale.ENGLISH);
         this.getLocales().loadLanguages();
     }
 
