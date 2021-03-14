@@ -206,4 +206,16 @@ public class CommentedYamlFile implements YamlFile {
     public Collection<ConfigOption<?>> getSupportedOptions() {
         return this.configOptions;
     }
+
+    public File getFile() {
+        return file;
+    }
+
+    public YamlConfiguration getConfig() {
+        return config;
+    }
+
+    public String[] getHeader() {
+        return header;
+    }
 }
