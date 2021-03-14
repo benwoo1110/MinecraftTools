@@ -27,12 +27,14 @@ public class CommentedYamlFile implements YamlFile {
     private final File file;
     private final YamlConfiguration config;
     private final Set<ConfigOption<?>> configOptions;
+    private final String[] header;
     private final Map<String, String[]> comments;
     private final Map<ConfigOption<?>, Object> cacheOptionValues;
 
-    public CommentedYamlFile(File file, Collection<ConfigOption<?>> configOptions) {
+    public CommentedYamlFile(File file, Collection<ConfigOption<?>> configOptions, String...header) {
         this.file = file;
         this.configOptions = new HashSet<>(configOptions);
+        this.header = header;
         this.comments = new HashMap<>(configOptions.size());
         this.cacheOptionValues = new HashMap<>(configOptions.size());
         this.config = new YamlConfiguration();
@@ -99,6 +101,8 @@ public class CommentedYamlFile implements YamlFile {
         ConfigContents configContents = new ConfigContents();
         int currentDepth = 0;
         String line;
+
+        this.insertComments(configContents, currentDepth, this.header);
 
         while ((line = fileData.readLine()) != null) {
             String key = getSectionKey(line);
