@@ -1,7 +1,9 @@
 package dev.benergy10.minecrafttools.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Arrays;
 import java.util.IllegalFormatException;
 import java.util.logging.Logger;
 
@@ -17,6 +19,10 @@ public final class Logging {
     public static void setup(Plugin plugin) {
         logger = Logger.getLogger(plugin.getName());
         debugLogger = Logger.getLogger(plugin.getName() + "-debug");
+    }
+
+    public static void showStartUpText(String...texts) {
+        Arrays.stream(texts).forEach(Bukkit.getLogger()::info);
     }
 
     public static void info(String msg, Object... args) {
