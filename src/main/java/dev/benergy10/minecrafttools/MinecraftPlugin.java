@@ -1,18 +1,12 @@
 package dev.benergy10.minecrafttools;
 
-import co.aikar.commands.PaperCommandManager;
-import co.aikar.locales.MessageKey;
+import dev.benergy10.minecrafttools.configs.YamlFile;
 import dev.benergy10.minecrafttools.utils.Logging;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public abstract class MinecraftPlugin extends JavaPlugin {
 
