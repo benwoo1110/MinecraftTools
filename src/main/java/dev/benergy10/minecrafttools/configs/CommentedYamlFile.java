@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -33,7 +34,7 @@ public class CommentedYamlFile implements YamlFile {
 
     public CommentedYamlFile(File file, Collection<ConfigOption<?>> configOptions, String...header) {
         this.file = file;
-        this.configOptions = new HashSet<>(configOptions);
+        this.configOptions = new LinkedHashSet<>(configOptions);
         this.header = header;
         this.comments = new HashMap<>(configOptions.size());
         this.cacheOptionValues = new HashMap<>(configOptions.size());
