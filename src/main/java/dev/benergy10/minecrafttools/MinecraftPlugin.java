@@ -1,8 +1,7 @@
 package dev.benergy10.minecrafttools;
 
-import dev.benergy10.minecrafttools.configs.YamlFile;
+import dev.benergy10.minecrafttools.commands.CommandManager;
 import dev.benergy10.minecrafttools.utils.Logging;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
