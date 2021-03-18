@@ -15,6 +15,10 @@ public class CommandManager extends PaperCommandManager {
         super(plugin);
         this.flagGroupManager = new FlagGroupManager(this);
 
+        // Apis
+        this.enableUnstableAPI("help");
+        this.enableUnstableAPI("brigadier");
+
         // Locales
         this.getLocales().addBundleClassLoader(new FileResClassLoader(this.getClass().getClassLoader(), plugin));
         this.addSupportedLanguage(Locale.ENGLISH);
