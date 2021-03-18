@@ -10,10 +10,10 @@ import java.util.Map;
 /**
  * Represents the value result parsed from command arguments.
  */
-public class FlagResult {
+public class FlagValues {
 
-    public static FlagResult newEmpty(@NotNull FlagGroup flagGroup) {
-        return new FlagResult(flagGroup);
+    public static FlagValues newEmpty(@NotNull FlagGroup flagGroup) {
+        return new FlagValues(flagGroup);
     }
 
     /**
@@ -21,12 +21,12 @@ public class FlagResult {
      *
      * @param args      The arguments to parse.
      * @param flagGroup The flags available to parse into.
-     * @return The {@link FlagResult} from the parse.
+     * @return The {@link FlagValues} from the parse.
      */
-    public static FlagResult parse(@Nullable String[] args,
+    public static FlagValues parse(@Nullable String[] args,
                                    @NotNull FlagGroup flagGroup) throws FlagParseFailedException {
 
-        Creator flagResult = new FlagResult.Creator(flagGroup);
+        Builder flagResult = new Builder(flagGroup);
 
         // No args to parse.
         if (args == null || args.length <= 0) {
@@ -111,7 +111,7 @@ public class FlagResult {
     private final FlagGroup flagGroup;
     private final Map<Flag<?>, SingleFlagResult<?>> resultMap;
 
-    private FlagResult(FlagGroup flagGroup) {
+    private FlagValues(FlagGroup flagGroup) {
         this.flagGroup = flagGroup;
         resultMap = new HashMap<>();
     }
@@ -123,7 +123,7 @@ public class FlagResult {
      * @param <T>   The type of value.
      * @return The value which is associated with the flag.
      */
-    public <T> T getValue(Flag<T> flag) {
+    public <T> T get(Flag<T> flag) {
         if (!this.flagGroup.containsFlag(flag)) {
             throw new IllegalArgumentException("Flag is not in group: " + flag.getName());
         }
@@ -202,12 +202,12 @@ public class FlagResult {
         }
     }
 
-    public static class Creator {
+    public static class Builder {
 
-        private final FlagResult result;
+        private final FlagValues result;
 
-        public Creator(FlagGroup group) {
-            this.result = new FlagResult(group);
+        public Builder(FlagGroup group) {
+            this.result = new FlagValues(group);
         }
 
         /**
@@ -216,7 +216,7 @@ public class FlagResult {
          * @param flag          The flag that the value represents.
          * @param inputValue    The raw arg input of the flag.
          */
-        public Creator addFromInput(Flag<?> flag, @Nullable String inputValue) {
+        public Builder addFromInput(Flag<?> flag, @Nullable String inputValue) {
             if (!this.result.flagGroup.containsFlag(flag)) {
                 throw new IllegalArgumentException("Flag is not in group: " + flag.getName());
             }
@@ -228,12 +228,12 @@ public class FlagResult {
             return this;
         }
 
-        public <T> Creator add(Flag<T> flag, T value) {
+        public <T> Builder add(Flag<T> flag, T value) {
             this.result.resultMap.put(flag, new SingleFlagResult<>(value, false));
             return this;
         }
 
-        public FlagResult finalise() {
+        public FlagValues finalise() {
             return this.result;
         }
     }

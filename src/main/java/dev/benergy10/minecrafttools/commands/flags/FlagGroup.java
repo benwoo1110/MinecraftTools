@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -98,11 +97,11 @@ public class FlagGroup {
      * Parse the arguments to get it's flag values.
      *
      * @param args  The arguments to parse.
-     * @return A {@link FlagResult} containing value results.
+     * @return A {@link FlagValues} containing value results.
      */
     @NotNull
-    public FlagResult calculateResult(String[] args) throws FlagParseFailedException {
-        return FlagResult.parse(args,this);
+    public FlagValues parse(String[] args) throws FlagParseFailedException {
+        return FlagValues.parse(args,this);
     }
 
     /**
