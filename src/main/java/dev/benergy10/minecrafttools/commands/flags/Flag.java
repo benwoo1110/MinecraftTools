@@ -17,7 +17,7 @@ import java.util.Collections;
  *     <li>Flag key and value present. {@link #getValue(String)}</li>
  * </ol>
  *
- * @param <T>   The flag Type.
+ * @param <T>   The flag type.
  */
 public abstract class Flag<T> {
 
@@ -102,6 +102,7 @@ public abstract class Flag<T> {
     /**
      * When this Command Flag can get value by a user input.
      *
+     * @param input The string to parse.
      * @return The {@link T} value.
      */
     public abstract T getValue(@NotNull String input);

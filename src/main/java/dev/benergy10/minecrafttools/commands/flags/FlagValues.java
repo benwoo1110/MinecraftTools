@@ -215,6 +215,7 @@ public class FlagValues {
          *
          * @param flag          The flag that the value represents.
          * @param inputValue    The raw arg input of the flag.
+         * @return The builder.
          */
         public Builder addFromInput(Flag<?> flag, @Nullable String inputValue) {
             if (!this.result.flagGroup.containsFlag(flag)) {
@@ -228,7 +229,18 @@ public class FlagValues {
             return this;
         }
 
+        /**
+         * Sets the value for a flag.
+         *
+         * @param flag  Target flag to set on.
+         * @param value Value to set.
+         * @param <T>   The flag type.
+         * @return The builder.
+         */
         public <T> Builder add(Flag<T> flag, T value) {
+            if (!this.result.flagGroup.containsFlag(flag)) {
+                throw new IllegalArgumentException("Flag is not in group: " + flag.getName());
+            }
             this.result.resultMap.put(flag, new SingleFlagResult<>(value, false));
             return this;
         }
