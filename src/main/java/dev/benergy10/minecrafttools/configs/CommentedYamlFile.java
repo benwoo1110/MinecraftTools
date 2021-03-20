@@ -196,6 +196,9 @@ public class CommentedYamlFile implements YamlFile {
     }
 
     public <T> T getValue(ConfigOption<T> option) {
+        if (!this.configOptions.contains(option)) {
+            throw new IllegalArgumentException("Config option not supported: " + option);
+        }
         return (T) this.cacheOptionValues.computeIfAbsent(option, (ConfigOption<?> opt) -> computeValue(opt));
     }
 
