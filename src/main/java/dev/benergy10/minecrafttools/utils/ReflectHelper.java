@@ -1,28 +1,48 @@
 package dev.benergy10.minecrafttools.utils;
 
+import com.google.common.base.Function;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 
 /**
  * Utility class used to help in doing various reflection actions.
  */
 public final class ReflectHelper {
 
+    private static final HashMap<String, Class<?>> CACHED_CLASSES = new HashMap<>();
+
     /**
      * Try to get the {@link Class} based on its classpath.
+     *
+     * @param classPath     The target classpath.
+     * @param recalculate   Whether to invalidate cache and get new result.
+     * @return A {@link Class} if found, else null.
+     */
+    @Nullable
+    public static Class<?> getClass(String classPath, boolean recalculate) {
+        if (recalculate) {
+            CACHED_CLASSES.remove(classPath);
+        }
+        return CACHED_CLASSES.computeIfAbsent(classPath, (Function<String, Class<?>>) input -> {
+            try {
+                return Class.forName(input);
+            } catch (ClassNotFoundException e) {
+                return null;
+            }
+        });
+    }
+
+    /**
+     * Try to get the {@link Class} based on its classpath. Results are cached.
      *
      * @param classPath The target classpath.
      * @return A {@link Class} if found, else null.
      */
-    @Nullable
     public static Class<?> getClass(String classPath) {
-        try {
-            return Class.forName(classPath);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
+        return getClass(classPath, false);
     }
 
     /**
