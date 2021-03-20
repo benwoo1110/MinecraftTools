@@ -72,9 +72,9 @@ public class CommentedYamlFile implements YamlFile {
     }
 
     private void loadDefaultValues() {
-        for (ConfigOption<?> option : this.configOptions) {
+        for (ConfigOption option : this.configOptions) {
             if (this.config.get(option.getPath()) == null) {
-                this.config.set(option.getPath(), option.getDefaultValue());
+                this.setValue(option, option.getDefaultValue());
             }
         }
     }
