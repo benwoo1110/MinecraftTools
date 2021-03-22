@@ -4,6 +4,8 @@ import com.google.common.base.Strings;
 import dev.benergy10.minecrafttools.utils.Logging;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,6 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -26,10 +29,10 @@ public class CommentedYamlFile implements YamlFile {
 
     private final File file;
     private final YamlConfiguration config;
-    private final Set<ConfigOption<?>> configOptions;
+    private final Set<ConfigOption> configOptions;
     private final String[] header;
     private final Map<String, String[]> comments;
-    private final Map<ConfigOption<?>, Object> cacheOptionValues;
+    private final Map<ConfigOption, Object> cacheOptionValues;
 
     public CommentedYamlFile(File file, Collection<ConfigOption<?>> configOptions, String...header) {
         this.file = file;
@@ -187,26 +190,45 @@ public class CommentedYamlFile implements YamlFile {
         return true;
     }
 
-    public <T> void setValue(ConfigOption<T> option, T value) {
+    public <T> boolean setValue(ConfigOption<T> option, T value) {
         if (!this.configOptions.contains(option)) {
             throw new IllegalArgumentException("Config option not supported: " + option);
         }
         this.config.set(option.getPath(), option.getHandler().serialize(value));
         this.cacheOptionValues.put(option, value);
+        return true;
+    }
+
+    @Override
+    public boolean setValue(String optionPath, Object value) {
+        return getOptionFromPath(optionPath).map(opt -> this.setValue(opt, value)).orElse(false);
     }
 
     public <T> T getValue(ConfigOption<T> option) {
         if (!this.configOptions.contains(option)) {
             throw new IllegalArgumentException("Config option not supported: " + option);
         }
-        return (T) this.cacheOptionValues.computeIfAbsent(option, (ConfigOption<?> opt) -> computeValue(opt));
+        return (T) this.cacheOptionValues.computeIfAbsent(option, (ConfigOption opt) -> computeValue(opt));
     }
 
-    private Object computeValue(ConfigOption<?> option) {
+    @Override
+    public @Nullable Object getValue(String optionPath) {
+        return getOptionFromPath(optionPath).map(this::getValue).orElse(null);
+    }
+
+    private Object computeValue(ConfigOption option) {
         return option.getHandler().deserialize(this.config.get(option.getPath()));
     }
 
-    public Collection<ConfigOption<?>> getSupportedOptions() {
+    private @NotNull Optional<ConfigOption> getOptionFromPath(String optionPath) {
+        Optional<ConfigOption> option = this.configOptions.stream()
+                .filter(opt -> opt.getPath().equals(optionPath))
+                .findFirst();
+        return option;
+    }
+
+
+    public Collection<ConfigOption> getSupportedOptions() {
         return this.configOptions;
     }
 
