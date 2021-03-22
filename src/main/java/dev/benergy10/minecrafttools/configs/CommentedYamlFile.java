@@ -220,13 +220,13 @@ public class CommentedYamlFile implements YamlFile {
         return option.getHandler().deserialize(this.config.get(option.getPath()));
     }
 
-    private @NotNull Optional<ConfigOption> getOptionFromPath(String optionPath) {
+    @Override
+    public @NotNull Optional<ConfigOption> getOptionFromPath(String optionPath) {
         Optional<ConfigOption> option = this.configOptions.stream()
                 .filter(opt -> opt.getPath().equals(optionPath))
                 .findFirst();
         return option;
     }
-
 
     public Collection<ConfigOption> getSupportedOptions() {
         return this.configOptions;
