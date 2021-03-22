@@ -20,6 +20,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public class CommentedYamlFile implements YamlFile {
@@ -201,7 +202,9 @@ public class CommentedYamlFile implements YamlFile {
 
     @Override
     public boolean setValue(String optionPath, Object value) {
-        return getOptionFromPath(optionPath).map(opt -> this.setValue(opt, value)).orElse(false);
+        return getOptionFromPath(optionPath)
+                .map((Function<ConfigOption, Boolean>) opt -> this.setValue(opt, value))
+                .orElse(false);
     }
 
     public <T> T getValue(ConfigOption<T> option) {
