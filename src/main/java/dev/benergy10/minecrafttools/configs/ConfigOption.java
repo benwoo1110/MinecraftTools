@@ -61,6 +61,9 @@ public interface ConfigOption<T> {
             if (this.option.handler == null) {
                 this.option.handler = ConfigOptionHandler.getDefault();
             }
+            if (this.option.setConsumer == null) {
+                this.option.setConsumer = (value) -> { };
+            }
             return this.option;
         }
 

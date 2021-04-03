@@ -57,7 +57,13 @@ public class CommentedYamlFile implements YamlFile {
         if (!initYamlFile()) {
             return;
         }
-        loadDefaultValues();
+        for (ConfigOption option : this.configOptions) {
+            if (this.config.get(option.getPath()) == null) {
+                this.setValue(option, option.getDefaultValue());
+                continue;
+            }
+            option.getSetConsumer().accept(this.getValue(option));
+        }
     }
 
     private boolean initYamlFile() {
@@ -73,14 +79,6 @@ public class CommentedYamlFile implements YamlFile {
             return false;
         }
         return true;
-    }
-
-    private void loadDefaultValues() {
-        for (ConfigOption option : this.configOptions) {
-            if (this.config.get(option.getPath()) == null) {
-                this.setValue(option, option.getDefaultValue());
-            }
-        }
     }
 
     public boolean reload() {
