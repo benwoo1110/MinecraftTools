@@ -197,6 +197,7 @@ public class CommentedYamlFile implements YamlFile {
         }
         this.config.set(option.getPath(), option.getHandler().serialize(value));
         this.cacheOptionValues.put(option, value);
+        option.getSetConsumer().accept(value);
         return true;
     }
 

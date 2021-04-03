@@ -10,17 +10,15 @@ import java.util.function.Consumer;
 
 public interface ConfigOption<T> {
 
-    @NotNull
-    String getPath();
+    @NotNull String getPath();
 
-    @Nullable
-    T getDefaultValue();
+    @Nullable T getDefaultValue();
 
-    @NotNull
-    String[] getComments();
+    @NotNull String[] getComments();
 
-    @NotNull
-    ConfigOptionHandler<T, ?> getHandler();
+    @NotNull ConfigOptionHandler<T, ?> getHandler();
+
+    @NotNull Consumer<T> getSetConsumer();
 
     class Builder<T> {
 
@@ -49,6 +47,11 @@ public interface ConfigOption<T> {
 
         public Builder<T> handler(ConfigOptionHandler<T, ?> handler) {
             this.option.handler = handler;
+            return this;
+        }
+
+        public Builder<T> setConsumer(Consumer<T> setConsumer) {
+            this.option.setConsumer = setConsumer;
             return this;
         }
 
