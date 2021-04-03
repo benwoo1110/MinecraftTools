@@ -20,7 +20,7 @@ public interface ConfigOption<T> {
     String[] getComments();
 
     @NotNull
-    ConfigOptionHandler<T> getHandler();
+    ConfigOptionHandler<T, ?> getHandler();
 
     class Builder<T> {
 
@@ -47,7 +47,7 @@ public interface ConfigOption<T> {
             return this;
         }
 
-        public Builder<T> handler(ConfigOptionHandler<T> handler) {
+        public Builder<T> handler(ConfigOptionHandler<T, ?> handler) {
             this.option.handler = handler;
             return this;
         }

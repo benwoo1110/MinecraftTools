@@ -1,6 +1,6 @@
 package dev.benergy10.minecrafttools.configs;
 
-class SimpleConfigOptionHandler<T> implements ConfigOptionHandler<T> {
+class SimpleConfigOptionHandler<T> implements ConfigOptionHandler<T, Object> {
 
     SimpleConfigOptionHandler() { }
 

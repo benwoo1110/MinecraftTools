@@ -8,7 +8,7 @@ class SimpleConfigOption<T> implements ConfigOption<T> {
     protected String path;
     protected T defaultValue;
     protected String[] comments;
-    protected ConfigOptionHandler<T> handler;
+    protected ConfigOptionHandler<T, ?> handler;
 
     SimpleConfigOption() { }
 
@@ -28,7 +28,7 @@ class SimpleConfigOption<T> implements ConfigOption<T> {
     }
 
     @Override
-    public @NotNull ConfigOptionHandler<T> getHandler() {
+    public @NotNull ConfigOptionHandler<T, ?> getHandler() {
         return this.handler;
     }
 }

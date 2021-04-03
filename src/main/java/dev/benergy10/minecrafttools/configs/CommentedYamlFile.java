@@ -220,7 +220,7 @@ public class CommentedYamlFile implements YamlFile {
     }
 
     private Object computeValue(ConfigOption option) {
-        return option.getHandler().deserialize(this.config.get(option.getPath()));
+        return option.getHandler().deserialize(option.getHandler().getData(this.config, option.getPath()));
     }
 
     @Override
