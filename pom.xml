@@ -6,7 +6,7 @@
 
     <groupId>dev.benergy10.minecrafttools</groupId>
     <artifactId>MinecraftTools</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>MinecraftTools</name>
     <description>Tools to aid in quick development of minecraft plugins.</description>
